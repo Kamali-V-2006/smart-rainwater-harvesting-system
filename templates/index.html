@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Smart Rainwater Forecast</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #e8f5f9;
+            text-align: center;
+            padding: 40px;
+            margin: 0;
+        }
+        h1 {
+            color: #0077cc;
+        }
+        .container {
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            display: inline-block;
+            max-width: 800px;
+            width: 90%;
+        }
+        .prediction {
+            font-size: 22px;
+            margin-top: 20px;
+            color: #333;
+        }
+        a {
+            text-decoration: none;
+            color: #0077cc;
+            font-weight: bold;
+            font-size: 16px;
+        }
+        a:hover {
+            color: #004b8d;
+        }
+        .button-link {
+            display: inline-block;
+            margin-top: 30px;
+        }
+        img {
+            margin-top: 30px;
+            width: 90%;
+            max-width: 600px;
+            border-radius: 10px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🌧 Smart Rainwater Forecast</h1>
+        <p><strong>Date:</strong> {{ date }}</p>
+
+        <div class="prediction">
+            <p><strong>Predicted Tank Level for Tomorrow:</strong></p>
+            <p>{{ prediction }} liters</p>
+        </div>
+
+        {% if plot_url %}
+            <img src="data:image/png;base64,{{ plot_url }}" alt="Rainwater Level Plot">
+        {% endif %}
+
+        <div class="button-link">
+            <p><a href="/log">➕ Log Today's Data</a></p>
+        </div>
+
+        <div class="button-link">
+            <p><a href="/dashboard">📊 View Analytics Dashboard</a></p>
+        </div>
+    </div>
+</body>
+</html>

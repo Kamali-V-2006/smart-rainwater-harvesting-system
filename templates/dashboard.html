@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Smart Rainwater Dashboard</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/chart.js">
+    <style>
+        body {
+            font-family: 'Segoe UI', sans-serif;
+            margin: 0;
+            background: #f0f4f8;
+            color: #333;
+        }
+
+        nav {
+            background: #4a148c;
+            color: white;
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        nav h2 {
+            margin: 0;
+        }
+
+        nav a {
+            color: white;
+            text-decoration: none;
+            margin-left: 1.5rem;
+            font-weight: bold;
+        }
+
+        .container {
+            padding: 2rem;
+        }
+
+        .cards {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .card {
+            background: white;
+            padding: 1rem;
+            border-radius: 12px;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+            flex: 1 1 200px;
+            min-width: 220px;
+        }
+
+        .card h3 {
+            margin: 0 0 0.5rem;
+            color: #4a148c;
+        }
+
+        .charts {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        canvas {
+            background: #fff;
+            padding: 1rem;
+            border-radius: 12px;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background: white;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+            margin-bottom: 2rem;
+        }
+
+        th, td {
+            padding: 1rem;
+            border-bottom: 1px solid #ddd;
+            text-align: left;
+        }
+
+        th {
+            background: #4a148c;
+            color: white;
+        }
+
+        .tips {
+            background: white;
+            padding: 1rem;
+            border-left: 6px solid #4a148c;
+            border-radius: 12px;
+        }
+
+        .tips ul {
+            margin: 0;
+            padding-left: 1.2rem;
+        }
+    </style>
+</head>
+<body>
+
+<nav>
+    <h2>Smart Rainwater Dashboard</h2>
+    <div>
+        <a href="/">Home</a>
+        
+    </div>
+</nav>
+
+<div class="container">
+
+    <!-- Summary Cards -->
+    <div class="cards">
+        <div class="card">
+            <h3>Tank Level</h3>
+            <p>{{ tank_level }} L</p>
+        </div>
+        <div class="card">
+            <h3>Predicted Rainfall</h3>
+            <p>{{ predicted_rainfall }} mm (Next 24h)</p>
+        </div>
+        <div class="card">
+            <h3>Usage Today</h3>
+            <p>{{ usage_today }} L</p>
+        </div>
+        <div class="card">
+            <h3>Average Savings</h3>
+            <p>{{ avg_savings }}%</p>
+        </div>
+    </div>
+
+    <!-- Charts -->
+    <div class="charts">
+        <canvas id="rainForecastChart"></canvas>
+        <canvas id="tankLevelChart"></canvas>
+    </div>
+
+    <!-- Data Table -->
+    <table>
+        <thead>
+            <tr>
+                <th>Date</th>
+                <th>Tank Level (L)</th>
+                <th>Rainfall (mm)</th>
+                <th>Usage (L)</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for row in records %}
+            <tr>
+                <td>{{ row.date.strftime('%Y-%m-%d') }}</td>
+                <td>{{ row.tank_level }}</td>
+                <td>{{ row.rainfall }}</td>
+                <td>{{ row.usage }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    <!-- Tips Section -->
+    <div class="tips">
+        <h3>Water Saving Tips</h3>
+        <ul>
+            <li>Use collected rainwater for gardening and cleaning</li>
+            <li>Fix leaky taps and pipes promptly</li>
+            <li>Install low-flow showerheads and faucets</li>
+            <li>Check usage data weekly to optimize consumption</li>
+        </ul>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+    const records = {{ records|tojson }};
+
+    const labels = records.map(r => r.date);
+    const rainData = records.map(r => r.rainfall);
+    const tankData = records.map(r => r.tank_level);
+
+    const rainForecastChart = new Chart(document.getElementById("rainForecastChart"), {
+        type: "line",
+        data: {
+            labels: labels,
+            datasets: [{
+                label: "Rainfall (mm)",
+                data: rainData,
+                backgroundColor: "rgba(74, 20, 140, 0.1)",
+                borderColor: "#4a148c",
+                borderWidth: 2,
+                fill: true
+            }]
+        },
+        options: {
+            responsive: true,
+            scales: {
+                y: { beginAtZero: true }
+            }
+        }
+    });
+
+    const tankLevelChart = new Chart(document.getElementById("tankLevelChart"), {
+        type: "bar",
+        data: {
+            labels: labels,
+            datasets: [{
+                label: "Tank Level (L)",
+                data: tankData,
+                backgroundColor: "#4a148c"
+            }]
+        },
+        options: {
+            responsive: true,
+            scales: {
+                y: { beginAtZero: true }
+            }
+        }
+    });
+</script>
+
+</body>
+</html>
+

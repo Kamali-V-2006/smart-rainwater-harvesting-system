@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Log Tank Data</title>
+    <style>
+        body { font-family: sans-serif; background: #f9f9f9; padding: 40px; }
+        form { background: white; padding: 20px; border-radius: 8px; max-width: 400px; margin: auto; }
+        input, button { width: 100%; padding: 10px; margin: 10px 0; }
+        button { background: #0077cc; color: white; border: none; border-radius: 5px; }
+        .nav-links {
+            max-width: 400px;
+            margin: 20px auto;
+            text-align: center;
+        }
+        .nav-links a {
+            text-decoration: none;
+            margin: 0 10px;
+            color: #0077cc;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <h2>💧 Log Today’s Tank Data</h2>
+    <form method="POST">
+        <input type="number" step="any" name="rainfall" placeholder="Rainfall (mm)" required>
+        <input type="number" step="any" name="inflow" placeholder="Inflow (L)" required>
+        <input type="number" step="any" name="usage" placeholder="Usage (L)" required>
+        <input type="number" step="any" name="tank_level" placeholder="Current Tank Level (L)" required>
+        <button type="submit">Submit</button>
+    </form>
+
+    <div class="nav-links">
+        <a href="/">🏠 Back to Home</a>
+        <a href="/dashboard">📊 View Dashboard</a>
+    </div>
+</body>
+</html>
